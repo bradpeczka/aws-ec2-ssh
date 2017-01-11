@@ -6,4 +6,4 @@ LOCAL_GROUPS="@@LOCAL_GROUPS@@"
 LOCAL_MARKER_GROUP="@@LOCAL_MARKER_GROUP@@"
 PATH="@@PATH@@"
 
-*/10 * * * * root @@INSTALL_PREFIX@@/bin/iam_user_sync
+*/30 * * * * root @@INSTALL_PREFIX@@/bin/iam_user_sync
