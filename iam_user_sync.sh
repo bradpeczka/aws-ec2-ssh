@@ -1,5 +1,8 @@
 #!/bin/bash -ex
 
+# Ensure non-zero exit codes aren't swallowed by sed pipes
+set -o pipefail
+
 SSH_AUTHORIZED_KEYS_DIR=${SSH_AUTHORIZED_KEYS_DIR:-/etc/ssh/authorized_keys}
 IAM_AUTHORIZED_GROUPS=${IAM_AUTHORIZED_GROUPS:-}
 LOCAL_GROUPS=${LOCAL_GROUPS:-}
