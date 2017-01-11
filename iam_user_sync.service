@@ -8,6 +8,6 @@ Environment="IAM_AUTHORIZED_GROUPS=@@IAM_AUTHORIZED_GROUPS@@"
 Environment="LOCAL_GROUPS=@@LOCAL_GROUPS@@"
 Environment="LOCAL_MARKER_GROUP=@@LOCAL_MARKER_GROUP@@"
 Environment="PATH=@@PATH@@"
-TimeoutStartSec=300
+TimeoutStartSec=1200
 TimeoutStopSec=120
 ExecStart=@@INSTALL_PREFIX@@/bin/iam_user_sync
