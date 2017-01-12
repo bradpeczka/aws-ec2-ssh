@@ -1,8 +1,8 @@
 [Unit]
-Description=Run iam_user_sync.service every 10 minutes
+Description=Run iam_user_sync.service every 30 minutes
 
 [Timer]
-OnCalendar=*:0/10
+OnCalendar=*:0/30
 Persistent=true
 
 [Install]

@@ -1,5 +1,8 @@
 #!/bin/bash -ex
 
+# Ensure non-zero exit codes aren't swallowed by sed pipes
+set -o pipefail
+
 SSH_AUTHORIZED_KEYS_DIR=${SSH_AUTHORIZED_KEYS_DIR:-/etc/ssh/authorized_keys}
 IAM_AUTHORIZED_GROUPS=${IAM_AUTHORIZED_GROUPS:-}
 LOCAL_GROUPS=${LOCAL_GROUPS:-}
@@ -23,7 +26,7 @@ function get_remote_users() {
 
 function create_update_local_user() {
   set +e
-  id ${1} >/dev/null 2>&1 || useradd -m ${1}
+  id ${1} >/dev/null 2>&1 || useradd -m ${1} && chown -R ${1}:${1} /home/${1}
   usermod -G ${LOCAL_GROUPS},${LOCAL_MARKER_GROUP} ${1}
   set -e
 }
