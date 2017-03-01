@@ -41,14 +41,13 @@ function delete_local_user() {
 }
 
 function gather_user_keys() {
-  set +e
   local tmpfile=$(mktemp)
   local key_ids=$(
     aws iam list-ssh-public-keys \
       --user-name ${1} \
       --query "SSHPublicKeys[?Status=='Active'].[SSHPublicKeyId]" \
       --output text \
-    | sed "s/\r//g"
+    | sed "s/\r//g" || return 1 # Fail-fast if key listing fails
   )
   for key_id in ${key_ids}; do
     aws iam get-ssh-public-key \
@@ -57,11 +56,10 @@ function gather_user_keys() {
       --encoding SSH \
       --query "SSHPublicKey.SSHPublicKeyBody" \
       --output text \
-    >> ${tmpfile}
+    >> ${tmpfile} || return 1 # Fail-fast if key gathering fails
   done
   chmod 644 ${tmpfile}
   mv ${tmpfile} ${SSH_AUTHORIZED_KEYS_DIR}/${1}
-  set -e
 }
 
 function sync_accounts() {
@@ -77,7 +75,12 @@ function sync_accounts() {
 
   for user in ${remote_users}; do
     create_update_local_user ${user}
+
+    # We allow gather_user_keys to fail because we ensure it either a) gathers *all* keys for a
+    # user, or b) makes no change to the user's local cached keys.
+    set +e
     gather_user_keys ${user}
+    set -e
   done
 
   for user in ${removed_users}; do
