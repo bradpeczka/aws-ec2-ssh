@@ -41,8 +41,8 @@ function delete_local_user() {
 }
 
 function gather_user_keys() {
-  local tmpfile=$(mktemp)
-  local key_ids=$(
+  tmpfile=$(mktemp)
+  key_ids=$(
     aws iam list-ssh-public-keys \
       --user-name ${1} \
       --query "SSHPublicKeys[?Status=='Active'].[SSHPublicKeyId]" \
@@ -68,10 +68,10 @@ function sync_accounts() {
     exit 1
   fi
 
-  local local_users=$(get_local_users)
-  local remote_users=$(get_remote_users)
-  local intersection=$(echo ${local_users} ${remote_users} | tr " " "\n" | sort | uniq -D | uniq)
-  local removed_users=$(echo ${local_users} ${intersection} | tr " " "\n" | sort | uniq -u)
+  local_users=$(get_local_users)
+  remote_users=$(get_remote_users)
+  intersection=$(echo ${local_users} ${remote_users} | tr " " "\n" | sort | uniq -D | uniq)
+  removed_users=$(echo ${local_users} ${intersection} | tr " " "\n" | sort | uniq -u)
 
   for user in ${remote_users}; do
     create_update_local_user ${user}
