@@ -26,7 +26,14 @@ function get_remote_users() {
 
 function create_update_local_user() {
   set +e
-  id ${1} >/dev/null 2>&1 || useradd -m ${1} && chown -R ${1}:${1} /home/${1}
+  if ! id ${1} >/dev/null 2>&1; then
+    if command -v adduser >/dev/null 2>&1; then
+      adduser ${1}
+    else
+      useradd -m ${1}
+    fi
+    chown -R ${1}:${1} /home/${1}
+  fi
   usermod -G ${LOCAL_GROUPS},${LOCAL_MARKER_GROUP} ${1}
   set -e
 }
