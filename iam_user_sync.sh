@@ -20,7 +20,7 @@ function get_remote_users() {
       --group-name ${group} \
       --query "Users[].[UserName]" \
       --output text \
-    | sed "s/\r//g"
+    | sed "s/\r//g" | sort | uniq
   done
 }
 
