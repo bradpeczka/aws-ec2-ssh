@@ -20,8 +20,8 @@ function get_remote_users() {
       --group-name ${group} \
       --query "Users[].[UserName]" \
       --output text \
-    | sed "s/\r//g" | sort | uniq
-  done
+    | sed "s/\r//g"
+  done | sort | uniq
 }
 
 function create_update_local_user() {
