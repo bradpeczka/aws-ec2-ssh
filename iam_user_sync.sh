@@ -21,7 +21,7 @@ function get_remote_users() {
       --query "Users[].[UserName]" \
       --output text \
     | sed "s/\r//g"
-  done
+  done | sort | uniq
 }
 
 function create_update_local_user() {
